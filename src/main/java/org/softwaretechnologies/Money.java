@@ -27,8 +27,15 @@ public class Money {
     @Override
     public boolean equals(Object o) {
         // TODO: реализуйте вышеуказанную функцию
-
-        return false;
+        Money money = (Money) o;
+        BigDecimal thisAmount = this.getAmount().setScale(4, RoundingMode.HALF_UP);
+        BigDecimal otherAmount = money.getAmount().setScale(4, RoundingMode.HALF_UP);
+        if (this.type == money.type && thisAmount.intValue() == otherAmount.intValue()){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -49,6 +56,32 @@ public class Money {
     @Override
     public int hashCode() {
         // TODO: реализуйте вышеуказанную функцию
+        int hash = 0;
+        if (this.amount == null){
+            return hash + 10000;
+        }
+        if (this.amount != null){
+            BigDecimal thisAmount1 = this.getAmount().setScale(4, RoundingMode.HALF_UP);
+            if (this.type == MoneyType.USD) {
+                hash = thisAmount1.intValue() * 10000 + 1;
+            }
+            if (this.type == MoneyType.EURO) {
+                hash = thisAmount1.intValue() * 10000 + 2;
+            }
+            if (this.type == MoneyType.RUB) {
+                hash = thisAmount1.intValue() * 10000 + 3;
+            }
+            if (this.type == MoneyType.KRONA) {
+                hash = thisAmount1.intValue() * 10000 + 4;
+            }
+            if (this.type == null) {
+                hash = thisAmount1.intValue() * 10000 + 5;
+            }
+            if (hash >= Integer.MAX_VALUE - 5){
+                hash = Integer.MAX_VALUE;
+            }
+            return hash;
+        }
 
 
         Random random = new Random();
@@ -74,8 +107,21 @@ public class Money {
      */
     @Override
     public String toString() {
+        String str = null;
         // TODO: реализуйте вышеуказанную функцию
-        String str = type.toString()+": "+amount.setScale(4, RoundingMode.HALF_UP).toString();
+        if (this.amount != null && this.type != null){
+            str = type.toString()+": "+amount.setScale(4, RoundingMode.HALF_UP).toString();
+        }
+        if (this.amount == null && this.type != null){
+            str = type.toString()+": null";
+        }
+        if (this.amount != null && this.type == null){
+            str = "null: "+amount.setScale(4, RoundingMode.HALF_UP).toString();
+        }
+        if (this.amount == null && this.type == null){
+            str = "null: null";
+        }
+
         return str;
     }
 
@@ -89,9 +135,10 @@ public class Money {
 
     public static void main(String[] args) {
         Money money = new Money(MoneyType.EURO, BigDecimal.valueOf(10.00012));
-        Money money1 = new Money(MoneyType.USD, BigDecimal.valueOf(10.5000));
+        Money money1 = new Money(MoneyType.EURO, BigDecimal.valueOf(12.40000));
         System.out.println(money1.toString());
         System.out.println(money1.hashCode());
         System.out.println(money.equals(money1));
     }
 }
+
