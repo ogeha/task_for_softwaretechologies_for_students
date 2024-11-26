@@ -1,4 +1,4 @@
-package org.softwaretechnologies;;
+package org.softwaretechnologies;
 
 import java.util.Optional;
 
@@ -9,7 +9,12 @@ public class ExceptionTask {
        Вызвана функция printMessage
      */
     public static void printMessage() {
-        throwRuntimeException();
+        try {
+            throwRuntimeException();
+        }
+        catch (RuntimeException e){
+            System.out.println("Вызвана функция printMessage");
+        }
         // TODO: реализуйте вышеуказанную функцию
 
     }
@@ -20,8 +25,13 @@ public class ExceptionTask {
      Вызвана функция printMessage2
      */
     public static void printMessage2() throws Exception {
-        throwCatchableException();
         // TODO: реализуйте вышеуказанную функцию
+        try{
+            throwCatchableException();
+        }
+        catch (Exception e){
+            System.out.println("Вызвана функция printMessage2");
+        }
     }
 
     private static void throwCatchableException() throws Exception {
@@ -42,6 +52,9 @@ public class ExceptionTask {
     public static int divide(int dividend, int divisor) throws DivideOnNullException {
 
         // TODO: реализуйте вышеуказанную функцию
+        if (divisor == 0){
+            throw new DivideOnNullException();
+        }
         return dividend/divisor;
     }
 
@@ -56,9 +69,12 @@ public class ExceptionTask {
      */
     public static Optional<String> mergeStrings(String first, String second) {
         // TODO: реализуйте вышеуказанную функцию
-
-
-
+        if (first == null){
+            return Optional.ofNullable(second);
+        }
+        if (second == null) {
+            return Optional.ofNullable(first);
+        }
         return Optional.of(first.length() > second.length() ? first + second : second + first);
     }
 }
